@@ -55,7 +55,8 @@ fi
 
 }
 #Here comes the operating...
-outPutFile=/e/Bat_shell/Files/log.txt
+rootDir=/e/Bat_shell/Files;
+outPutFile=$rootDir/log.txt
 echo "Parameter:$1"
 #Uppercase to Lowercase
 LOWERCASE=$(echo $1 | tr '[A-Z]' '[a-z]')
@@ -76,6 +77,7 @@ for filename in \
 	Android_battery\
 	AndroidProcess\
 	AndroidPreference\
+	AndroidStorage\
 	WideTouch\
 	AndroidCustomedControler
 do	
@@ -127,31 +129,37 @@ df)
 adb shell df > $outPutFile
 ;;
 dbl)
-#adb pull //data/system/users/10/settings.db;
 adb pull //data/data/com.android.providers.settings/databases/settings.db;
 ;;
 dbm)
-adb pull //data/system/users/0/settings_global.xml;
-adb pull //data/system/users/0/settings_secure.xml;
-adb pull //data/system/users/0/settings_system.xml;
-adb pull //data/system/users/10/settings_system.xml;
+userid=$2;
+dirname=$rootDir/DeviceInfo/Users/$userid;
+if [ ! -d "$dirname" ]; then 
+mkdir -p "$dirname" 
+fi
+adb pull //data/system/users/$userid/settings_global.xml $dirname;
+adb pull //data/system/users/$userid/settings_secure.xml $dirname;
+adb pull //data/system/users/$userid/settings_system.xml $dirname;
 #adb pull //data/data/com.android.providers.settings/databases/settings.db-backup;
 #adb pull //data/data/com.android.providers.settings/databases/settings.db-journal;
 ;;
 dbi)
-adb pull //data/system/input-manager-state.xml;
-;;
-dbid)
-adb remount;
-adb shell;
-rm data/system/input-manager-state.xml;
+dirname=$rootDir/DeviceInfo/InputInfo;
+if [ ! -d "$dirname" ]; then 
+mkdir -p "$dirname" 
+fi
+adb pull //data/system/input-manager-state.xml $dirname;
 ;;
 dbip)
-adb pull //data/system/mServiceProcessesByName.xml;
-adb pull //data/system/mServiceProcessesByPid.xml;
-adb pull //data/system/mRunningProcesses.xml;
-adb pull //data/system/mInterestingProcesses.xml;
-adb pull //data/system/mMergedItems.xml;
+dirname=$rootDir/DeviceInfo/AndroidProcessService;
+if [ ! -d "$dirname" ]; then 
+mkdir -p "$dirname" 
+fi
+adb pull //data/system/mServiceProcessesByName.xml $dirname;
+adb pull //data/system/mServiceProcessesByPid.xml $dirname;
+adb pull //data/system/mRunningProcesses.xml $dirname;
+adb pull //data/system/mInterestingProcesses.xml $dirname;
+adb pull //data/system/mMergedItems.xml $dirname;
 ;;
 pml)
 adb shell pm list packages -f > $outPutFile
