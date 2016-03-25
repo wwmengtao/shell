@@ -54,6 +54,12 @@ if [ -f $filename*.$suffix ]; then
 fi
 
 }
+function confirmDirExist(){
+dirname=$1;
+if [ ! -d "$dirname" ]; then 
+mkdir -p "$dirname" 
+fi
+}
 #Here comes the operating...
 rootDir=/e/Bat_shell/Files;
 outPutFile=$rootDir/log.txt
@@ -108,6 +114,12 @@ r)
 l)
 	adb logcat -c
 	echo Tip:Logcat is runing......
+	if [ "$2" = "mtk" ]
+	then
+		dirname=$rootDir/DeviceInfo/mtklog;
+		confirmDirExist $dirname;
+		adb pull //sdcard/mtklog/mobilelog $dirname;
+	fi
 	if [ "$2" = "" ]
 	then
 		adb logcat > $outPutFile
@@ -134,9 +146,7 @@ adb pull //data/data/com.android.providers.settings/databases/settings.db;
 dbm)
 userid=$2;
 dirname=$rootDir/DeviceInfo/Users/$userid;
-if [ ! -d "$dirname" ]; then 
-mkdir -p "$dirname" 
-fi
+confirmDirExist $dirname;
 adb pull //data/system/users/$userid/settings_global.xml $dirname;
 adb pull //data/system/users/$userid/settings_secure.xml $dirname;
 adb pull //data/system/users/$userid/settings_system.xml $dirname;
@@ -145,16 +155,12 @@ adb pull //data/system/users/$userid/settings_system.xml $dirname;
 ;;
 dbi)
 dirname=$rootDir/DeviceInfo/InputInfo;
-if [ ! -d "$dirname" ]; then 
-mkdir -p "$dirname" 
-fi
+confirmDirExist $dirname;
 adb pull //data/system/input-manager-state.xml $dirname;
 ;;
 dbip)
 dirname=$rootDir/DeviceInfo/AndroidProcessService;
-if [ ! -d "$dirname" ]; then 
-mkdir -p "$dirname" 
-fi
+confirmDirExist $dirname;
 adb pull //data/system/mServiceProcessesByName.xml $dirname;
 adb pull //data/system/mServiceProcessesByPid.xml $dirname;
 adb pull //data/system/mRunningProcesses.xml $dirname;
@@ -172,7 +178,11 @@ else
 adb shell ps | grep $2;
 fi
 ;;
-
+sp)
+dirname=$rootDir/DeviceInfo/SharedPreferences;
+confirmDirExist $dirname;
+adb pull //data/data/com.lenovo.widetouch/shared_prefs $dirname;
+;;
 esac
 #如果有至少一个安装文件安装到手机中，那么重启手机
 strAll=$DeviceReboot;
