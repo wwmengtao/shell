@@ -78,14 +78,16 @@ for filename in \
 	SettingsProvider\
 	Settings\
 	LenovoSettings\
+	LenovoSecurity\
 	NotificationCenterPlus\
 	NotificationCenter\
 	Android_battery\
-	AndroidProcess\
+	AndroidProcessService\
 	AndroidPreference\
 	AndroidStorage\
 	WideTouch\
 	AndroidCustomedControler
+
 do	
 	adbPush $filename "apk" "//system/priv-app"
 done
@@ -150,6 +152,11 @@ confirmDirExist $dirname;
 adb pull //data/system/users/$userid/settings_global.xml $dirname;
 adb pull //data/system/users/$userid/settings_secure.xml $dirname;
 adb pull //data/system/users/$userid/settings_system.xml $dirname;
+adb pull //data/system/users/$userid/restricted-packages.xml $dirname;
+adb pull //data/system/users/$userid/package-restrictions.xml $dirname;
+adb pull //data/system/users/$userid/registered_services $dirname;
+adb pull //data/system/users/$userid/runtime-permissions.xml $dirname;
+adb pull //data/system/users/$userid/appwidgets.xml $dirname;
 #adb pull //data/data/com.android.providers.settings/databases/settings.db-backup;
 #adb pull //data/data/com.android.providers.settings/databases/settings.db-journal;
 ;;
@@ -158,7 +165,7 @@ dirname=$rootDir/DeviceInfo/InputInfo;
 confirmDirExist $dirname;
 adb pull //data/system/input-manager-state.xml $dirname;
 ;;
-dbip)
+dbps)
 dirname=$rootDir/DeviceInfo/AndroidProcessService;
 confirmDirExist $dirname;
 adb pull //data/system/mServiceProcessesByName.xml $dirname;
@@ -166,6 +173,12 @@ adb pull //data/system/mServiceProcessesByPid.xml $dirname;
 adb pull //data/system/mRunningProcesses.xml $dirname;
 adb pull //data/system/mInterestingProcesses.xml $dirname;
 adb pull //data/system/mMergedItems.xml $dirname;
+;;
+ops)
+dirname=$rootDir/DeviceInfo/AppOps;
+confirmDirExist $dirname;
+adb pull //data/system/appops.xml $dirname;
+adb pull //system/etc/appops_policy.xml $dirname;
 ;;
 pml)
 adb shell pm list packages -f > $outPutFile
