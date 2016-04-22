@@ -1,6 +1,6 @@
 #!/bin/sh
 function cmdAndGitbash(){
-#cmd指令
+#cmd commands
 adb pull /data/data/com.android.providers.settings/databases/settings.db
 adb push /d/Software/Temp/PowerManager.apk /system/priv-app/PowerManager
 ren D:\Software\Temp\PowerSettingActivity_signed.apk PowerManager.apk
@@ -8,7 +8,7 @@ adb push D:\Software\Temp\PowerManager.apk /system/priv-app/PowerManager
 adb logcat -c;
 adb logcat > D:\WorkMaterial\localrepo\LenovoPower\log.txt
 
-#git-bash指令
+#git-bash commands
 mv /d/Software/Temp/PowerSettingActivity_signed.apk /d/Software/Temp/PowerManager.apk
 adb pull //data/data/com.android.providers.settings/databases/settings.db
 adb push /d/Software/Temp/PowerManager.apk //system/priv-app/PowerManager
@@ -27,7 +27,7 @@ function adbPush()
 filename=$1
 suffix=$2
 mountPath=$3
-
+APKDelete=$4
 if [ -f $filename*.$suffix ]; then 
 
 	let index_remount++
@@ -49,8 +49,9 @@ if [ -f $filename*.$suffix ]; then
 		adb push $filename.$suffix $mountPath
 		;;
 	esac
-
-	rm $filename.$suffix
+	if [ "$APKDelete" != "n" ]; then 
+		rm $filename.$suffix
+	fi
 fi
 
 }
@@ -67,6 +68,7 @@ echo "Parameter:$1"
 #Uppercase to Lowercase
 LOWERCASE=$(echo $1 | tr '[A-Z]' '[a-z]')
 DeviceReboot=$(echo $2 | tr '[A-Z]' '[a-z]')
+APKDelete=$(echo $3 | tr '[A-Z]' '[a-z]')
 case $LOWERCASE in
 p)
 filename=PowerManager;
@@ -77,6 +79,7 @@ s)
 for filename in \
 	SettingsProvider\
 	Settings\
+	VpnDialogs\
 	LenovoSettings\
 	LenovoSecurity\
 	NotificationCenterPlus\
@@ -85,11 +88,13 @@ for filename in \
 	AndroidProcessService\
 	AndroidPreference\
 	AndroidStorage\
+	AndroidTest2\
+	AndroidTest\
 	WideTouch\
 	AndroidCustomedControler
 
 do	
-	adbPush $filename "apk" "//system/priv-app"
+	adbPush $filename "apk" "//system/priv-app" $APKDelete
 done
 ;;
 f)
@@ -138,6 +143,12 @@ adb shell dumpsys activity top > $outPutFile
 ;;
 dpi)
 adb shell dumpsys input > $outPutFile
+;;
+dpn)
+adb shell dumpsys notification > $outPutFile
+;;
+dpw)
+adb shell dumpsys window > $outPutFile
 ;;
 df)
 adb shell df > $outPutFile
@@ -197,10 +208,10 @@ confirmDirExist $dirname;
 adb pull //data/data/com.lenovo.widetouch/shared_prefs $dirname;
 ;;
 esac
-#如果有至少一个安装文件安装到手机中，那么重启手机
+#Following judge if reboot the device
 strAll=$DeviceReboot;
 strPar="r";
-reboot=$(echo "$strAll"| grep "$strPar");#输入的指令只要包含strPar中的内容即视为要求重启
+reboot=$(echo "$strAll"| grep "$strPar");#if strAll contains strPar,reboot the device
 #echo $reboot
 
 if [ $index_reboot = 1 -a "$reboot" != "" ]; then 
