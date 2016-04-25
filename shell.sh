@@ -77,7 +77,7 @@ function strContains(){
 	    return 0
 	fi
 }
-
+#adbDeviceExists:Test if the adb device exists
 function adbDeviceExists(){
 	while (true)
 	do
@@ -91,7 +91,7 @@ function adbDeviceExists(){
 		fi
 	done
 }
-
+#demo:describe the command of shell.sh
 function demo(){
 	./shell s r n;r:reboot the device;n:delete the file installed to device
 }
