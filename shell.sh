@@ -49,7 +49,10 @@ if [ -f $filename*.$suffix ]; then
 		adb push $filename.$suffix $mountPath
 		;;
 	esac
-	if [ "$APKDelete" != "n" ]; then 
+	strPar="n";
+	strContains "$APKDelete" "$strPar";
+	deleteFile=$?;
+	if [ $deleteFile -eq 0 ]; then 
 		rm $filename.$suffix
 	fi
 fi
@@ -57,14 +60,46 @@ fi
 }
 function confirmDirExist(){
 dirname=$1;
-if [ ! -d "$dirname" ]; then 
-mkdir -p "$dirname" 
+if [ -d "$dirname" ]; then 
+	rm -rf "$dirname"
 fi
+mkdir -p "$dirname" 
+}
+
+function strContains(){
+	strA=$1;
+	strB=$2;
+	result=$(echo $strA | grep "${strB}")
+	if [ "$result" != "" ]
+	then
+	    return 1
+	else
+	    return 0
+	fi
+}
+
+function adbDeviceExists(){
+	while (true)
+	do
+		desDevices="List of devices attached";
+		len_desDevices=$(echo `expr length "$desDevices"`);
+		adbDevices=$(echo `adb devices`);
+		len_adbDevices=$(echo `expr length "$adbDevices"`);
+
+		if [ $len_desDevices -ne $len_adbDevices ]; then
+			break 1;
+		fi
+	done
+}
+
+function demo(){
+	./shell s r n;r:reboot the device;n:delete the file installed to device
 }
 #Here comes the operating...
+adbDeviceExists;#firstly, judge if the adb devices exists
 rootDir=/e/Bat_shell/Files;
 outPutFile=$rootDir/log.txt
-echo "Parameter:$1"
+echo "Parameter1:$1"
 #Uppercase to Lowercase
 LOWERCASE=$(echo $1 | tr '[A-Z]' '[a-z]')
 DeviceReboot=$(echo $2 | tr '[A-Z]' '[a-z]')
@@ -211,12 +246,13 @@ esac
 #Following judge if reboot the device
 strAll=$DeviceReboot;
 strPar="r";
-reboot=$(echo "$strAll"| grep "$strPar");#if strAll contains strPar,reboot the device
+strContains "$strAll" "$strPar";
+reboot=$?;#if strAll contains strPar,reboot the device
 #echo $reboot
-
-if [ $index_reboot = 1 -a "$reboot" != "" ]; then 
+if [ $index_reboot = 1 -a "$reboot" -eq 1 ]; then 
 	adb reboot
 	echo "rebooting..."
 fi
+
 
 
