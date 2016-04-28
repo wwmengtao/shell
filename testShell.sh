@@ -3,7 +3,6 @@ function arrayParameter()
 {
     echo "Number of params: $#"
     echo "Params: $@"
-    echo $#
     while [ $# -gt 0 ]
     do
         echo $1
@@ -25,11 +24,31 @@ function testArrayParameters(){
 	arrayParameter ${paramArray[*]}
 }
 
+function arrayParameter2()
+{
+	index=$1
+	array=$2
+	echo $index
+	echo ${array[*]}
+}
+
+function arrayParameter3()
+{
+	array=$1
+	index=$2
+	echo ${array[*]}
+	echo $index
+}
 
 function testArrayParameters2(){
 	paramArray=(a b c)
 	index="test"
+	echo "-----Call function arrayParameter-----"
 	arrayParameter $index "${paramArray[@]}" 
+	echo "-----Call function arrayParameter2-----"
+	arrayParameter2 $index "${paramArray[@]}"
+	echo "-----Call function arrayParameter3-----"
+	arrayParameter3 "${paramArray[@]}" $index 
 }
 #testArrayParameters;
 testArrayParameters2;
