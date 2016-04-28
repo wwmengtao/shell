@@ -28,14 +28,17 @@ function arrayParameter2()
 {
 	index=$1
 	array=$2
+	echo "$#:$@"
 	echo $index
 	echo ${array[*]}
+
 }
 
 function arrayParameter3()
 {
 	array=$1
 	index=$2
+	echo "$#:$@"
 	echo ${array[*]}
 	echo $index
 }
