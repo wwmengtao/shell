@@ -11,12 +11,14 @@ function arrayParameter()
     done
 }
 
-paramArray=(a "bb" "cc  dd" "ee   ff   gg")
+paramArray=(a 
+	#"bb" 
+	"cc  dd" "ee   ff   gg")
 echo "-----Call function with \"\${paramArray[@]}\"-----"
-demo1 "${paramArray[@]}"
+arrayParameter "${paramArray[@]}"
 echo "-----Call function with \"\${paramArray[*]}\"-----"
-demo1 "${paramArray[*]}"
+arrayParameter "${paramArray[*]}"
 echo "-----Call function with \${paramArray[@]}-----"
-demo1 ${paramArray[@]}
+arrayParameter ${paramArray[@]}
 echo "-----Call function with \${paramArrya[*]}-----"
-demo1 ${paramArray[*]}
+arrayParameter ${paramArray[*]}
