@@ -176,6 +176,9 @@ gp)
 dpa)
 adb shell dumpsys activity top > $outPutFile
 ;;
+dpaa)
+adb shell dumpsys activity activities | sed -En -e '/Running activities/,/Run #0/p';
+;;
 dpi)
 adb shell dumpsys input > $outPutFile
 ;;
@@ -184,6 +187,9 @@ adb shell dumpsys notification > $outPutFile
 ;;
 dpw)
 adb shell dumpsys window > $outPutFile
+;;
+dpp)
+adb shell pm list package -f > $outPutFile
 ;;
 df)
 adb shell df > $outPutFile
