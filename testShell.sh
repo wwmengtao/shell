@@ -11,14 +11,25 @@ function arrayParameter()
     done
 }
 
-paramArray=(a 
+function testArrayParameters(){
+	paramArray=(a 
 	#"bb" 
 	"cc  dd" "ee   ff   gg")
-echo "-----Call function with \"\${paramArray[@]}\"-----"
-arrayParameter "${paramArray[@]}"
-echo "-----Call function with \"\${paramArray[*]}\"-----"
-arrayParameter "${paramArray[*]}"
-echo "-----Call function with \${paramArray[@]}-----"
-arrayParameter ${paramArray[@]}
-echo "-----Call function with \${paramArrya[*]}-----"
-arrayParameter ${paramArray[*]}
+	echo "-----Call function with \"\${paramArray[@]}\"-----"
+	arrayParameter "${paramArray[@]}"
+	echo "-----Call function with \"\${paramArray[*]}\"-----"
+	arrayParameter "${paramArray[*]}"
+	echo "-----Call function with \${paramArray[@]}-----"
+	arrayParameter ${paramArray[@]}
+	echo "-----Call function with \${paramArrya[*]}-----"
+	arrayParameter ${paramArray[*]}
+}
+
+
+function testArrayParameters2(){
+	paramArray=(a b c)
+	index="test"
+	arrayParameter $index "${paramArray[@]}" 
+}
+#testArrayParameters;
+testArrayParameters2;
