@@ -38,7 +38,9 @@ if [ -f $filename*.$suffix ]; then
 	index_reboot=1
 	case "$suffix" in
 	apk)
-		mv $filename*.$suffix $filename.$suffix
+		if [ ! -f $filename.$suffix ]; then 
+			mv $filename*.$suffix $filename.$suffix
+		fi
 		if [ "$filename" = "framework-res" ]; then 
 			adb push $filename.$suffix $mountPath
 		else 
