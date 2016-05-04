@@ -10,6 +10,27 @@ function arrayParameter()
     done
 }
 
+function arrayParameter2()
+{
+	index=$1
+	array=$2
+    echo "Number of params: $#"
+    echo "Params: $@"
+	echo $index
+	echo ${array[*]}
+
+}
+
+function arrayParameter3()
+{
+	array=$1
+	index=$2
+    echo "Number of params: $#"
+    echo "Params: $@"
+	echo ${array[*]}
+	echo $index
+}
+
 function testArrayParameters(){
 	paramArray=(a 
 	#"bb" 
@@ -22,25 +43,6 @@ function testArrayParameters(){
 	arrayParameter ${paramArray[@]}
 	echo "-----Call function with \${paramArrya[*]}-----"
 	arrayParameter ${paramArray[*]}
-}
-
-function arrayParameter2()
-{
-	index=$1
-	array=$2
-	echo "$#:$@"
-	echo $index
-	echo ${array[*]}
-
-}
-
-function arrayParameter3()
-{
-	array=$1
-	index=$2
-	echo "$#:$@"
-	echo ${array[*]}
-	echo $index
 }
 
 function testArrayParameters2(){
