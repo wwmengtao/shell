@@ -1,6 +1,7 @@
 #!/bin/sh
 function arrayParameter()
-{
+{	paramArray=$1;
+	echo "arraySize:${#paramArray[*]}"
     echo "Number of params: $#"
     echo "Params: $@"
     while [ $# -gt 0 ]
@@ -10,50 +11,25 @@ function arrayParameter()
     done
 }
 
-function arrayParameter2()
-{
-	index=$1
-	array=$2
-    echo "Number of params: $#"
-    echo "Params: $@"
-	echo $index
-	echo ${array[*]}
-
-}
-
-function arrayParameter3()
-{
-	array=$1
-	index=$2
-    echo "Number of params: $#"
-    echo "Params: $@"
-	echo ${array[*]}
-	echo $index
-}
-
-function testArrayParameters(){
-	paramArray=(a 
-	#"bb" 
-	"cc  dd" "ee   ff   gg")
+#if you use the array parameter both same in function testArrayParameter and arrayParameter, you will get the real arraysize
+#如果调用arrayParameter使用的数组参数名称和arrayParameter中paramArray=$1的参数名称相同，那么得到真实的数组大小，否则只能$#$@判断
+function testArrayParameter(){
+	array=(a b c)
+	echo "-----Call function with \${array[@]}-----"
+	arrayParameter ${array[@]}
+	echo "-----Call function with \${array[*]}-----"
+	arrayParameter ${array[*]}
+	echo "-----Call function with \"\$array\"-----"
+	arrayParameter $array	
+	#
+	paramArray=(a "cc  dd" "ee   ff   gg")
 	echo "-----Call function with \"\${paramArray[@]}\"-----"
 	arrayParameter "${paramArray[@]}"
 	echo "-----Call function with \"\${paramArray[*]}\"-----"
 	arrayParameter "${paramArray[*]}"
-	echo "-----Call function with \${paramArray[@]}-----"
-	arrayParameter ${paramArray[@]}
-	echo "-----Call function with \${paramArrya[*]}-----"
-	arrayParameter ${paramArray[*]}
+	echo "-----Call function with \"\$paramArray\"-----"
+	arrayParameter $paramArray	
 }
 
-function testArrayParameters2(){
-	paramArray=(a b c)
-	index="test"
-	echo "-----Call function arrayParameter-----"
-	arrayParameter $index "${paramArray[@]}" 
-	echo "-----Call function arrayParameter2-----"
-	arrayParameter2 $index "${paramArray[@]}"
-	echo "-----Call function arrayParameter3-----"
-	arrayParameter3 "${paramArray[@]}" $index 
-}
-#testArrayParameters;
-testArrayParameters2;
+#Following comes the operation......
+testArrayParameter;
