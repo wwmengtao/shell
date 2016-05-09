@@ -133,6 +133,12 @@ for filename in \
 do	
 	adbPush $filename "apk" "//system/priv-app" $APKDelete
 done
+
+for filename in \
+	DocumentsUI
+do
+	adbPush $filename "apk" "//system/app" $APKDelete
+done
 ;;
 f)
 for filename in \
@@ -141,14 +147,14 @@ for filename in \
 	services\
 	lenovocomponents
 do
-	adbPush $filename "jar"	"//system/framework"
+	adbPush $filename "jar"	"//system/framework" $APKDelete
 done
 
 for filename in \
 	lenovo-res\
 	framework-res
 do
-	adbPush $filename "apk"	"//system/framework"
+	adbPush $filename "apk"	"//system/framework" $APKDelete
 done
 ;;
 r)
