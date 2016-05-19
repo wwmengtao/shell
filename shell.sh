@@ -114,6 +114,14 @@ adbPush $filename "apk" "//system/priv-app"
 ;;
 s)
 for filename in \
+	DownloadProviderUi\
+	DocumentsUI
+do
+	adbPush $filename "apk" "//system/app" $APKDelete
+done
+
+for filename in \
+	DownloadProvider\
 	SettingsProvider\
 	Settings\
 	VpnDialogs\
@@ -129,19 +137,13 @@ for filename in \
 	AndroidTest\
 	WideTouch\
 	AndroidCustomedControler
-
 do	
 	adbPush $filename "apk" "//system/priv-app" $APKDelete
-done
-
-for filename in \
-	DocumentsUI
-do
-	adbPush $filename "apk" "//system/app" $APKDelete
 done
 ;;
 f)
 for filename in \
+	telephony-common\
 	framework\
 	ext\
 	services\
