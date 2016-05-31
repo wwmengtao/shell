@@ -110,27 +110,49 @@ fi
 
 
 #4.Across line to find the content
-outFileName=/home/mengtao1/Downloads/1.txt;
-echo "" > $outFileName;
-index=0;
-for filename in `find . -name "*.txt"`
-do
-	for searchContent in\
-		AmPmMarkers\
-		AmPmMarkersNarrow
-	do
-		num=`grep -c $searchContent $filename`;
-		if [ $num -ne 0 ];then 
-			let index++;
-			if [ $index -ne 2 ];then
-				echo $filename >> $outFileName;
-			else
-				echo "" >> $outFileName;
-			fi
-			awk "/$searchContent{/,/}/" $filename >> $outFileName;
-		fi
-	done
+function ampm(){
+	localesDir=$1;
+	outFileName=$2;
+	echo "" > $outFileName;
 	index=0;
-done
+	for filename in `find $localesDir -name "*.txt"`
+	do
+		for searchContent in\
+			"AmPmMarkers{"\
+			"AmPmMarkers%variant{"\
+			"AmPmMarkersNarrow"{
+		do
+			num=`grep -c $searchContent $filename`;
+			if [ $num -ne 0 ];then 
+				let index++;
+				if [ $index -eq 1 ];then
+					echo $filename >> $outFileName;
+				else
+					echo "" >> $outFileName;
+				fi
+				awk "/$searchContent/,/}/" $filename >> $outFileName;
+			fi
+		done
+		index=0;
+	done
+}
+#How to use?
+rootDir=/e/Bat_shell/Files;
+outPutFile=$rootDir/log.txt
+localesDir=/e/Bat_shell/Files/locales;
+ampm $localesDir $outPutFile;
 
-
+function aaptFunction(){
+	dir=/d/workspace/AndroidTest
+	sdk_dir=/e/Android/android-sdk-M/platforms/android-23/
+	# 编译后生成的zip文件
+	out_filename=./SourceAapt.zip
+	# 解压后的文件夹
+	out_zipdir=./SourceAapt
+	# 编译
+	aapt p -f -M $dir/AndroidManifest.xml -F $out_filename -S $dir/res -I $sdk_dir/android.jar
+	# 解压
+	unzip -o $out_filename -d $out_zipdir
+	# 删除zip文件
+	rm $out_filename
+}
