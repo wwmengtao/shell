@@ -230,11 +230,12 @@ adb pull //data/system/input-manager-state.xml $dirname;
 dbps)
 dirname=$rootDir/DeviceInfo/AndroidProcessService;
 confirmDirExist $dirname;
-adb pull //data/system/mServiceProcessesByName.xml $dirname;
-adb pull //data/system/mServiceProcessesByPid.xml $dirname;
-adb pull //data/system/mRunningProcesses.xml $dirname;
-adb pull //data/system/mInterestingProcesses.xml $dirname;
-adb pull //data/system/mMergedItems.xml $dirname;
+xmlDir=//data/data/com.android.settings/files;
+adb pull $xmlDir/mServiceProcessesByName.xml $dirname;
+adb pull $xmlDir/mServiceProcessesByPid.xml $dirname;
+adb pull $xmlDir/mRunningProcesses.xml $dirname;
+adb pull $xmlDir/mInterestingProcesses.xml $dirname;
+adb pull $xmlDir/mMergedItems.xml $dirname;
 ;;
 ops)
 dirname=$rootDir/DeviceInfo/AppOps;

@@ -31,19 +31,20 @@ function testArrayParameter(){
 	arrayParameter $paramArray	
 }
 
+function aaptFunction(){
+	dir=/d/workspace/AndroidTest
+	sdk_dir=/e/Android/android-sdk-M/platforms/android-23/
+	# 编译后生成的zip文件
+	out_filename=./SourceAapt.zip
+	# 解压后的文件夹
+	out_zipdir=./SourceAapt
+	# 编译
+	aapt p -f -M $dir/AndroidManifest.xml -F $out_filename -S $dir/res -I $sdk_dir/android.jar
+	# 解压
+	unzip -o $out_filename -d $out_zipdir
+	# 删除zip文件
+	rm $out_filename
+}
 #Following comes the operation......
 #testArrayParameter;
-
-dir=/d/workspace/AndroidTest
-sdk_dir=/e/Android/android-sdk-M/platforms/android-23/
-# 编译后生成的zip文件
-out_filename=./SourceAapt.zip
-# 解压后的文件夹
-out_zipdir=./SourceAapt
-
-# 编译
-aapt p -f -M $dir/AndroidManifest.xml -F $out_filename -S $dir/res -I $sdk_dir/android.jar
-
-# 解压
-#unzip -o $out_filename -d $out_zipdir# 删除zip文件
-#rm $out_filename
+aaptFunction;
