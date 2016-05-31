@@ -38,6 +38,7 @@ if [ -f $filename*.$suffix ]; then
 	index_reboot=1
 	case "$suffix" in
 	apk)
+		#-f判断filename这个文件是否存在
 		if [ ! -f $filename.$suffix ]; then 
 			mv $filename*.$suffix $filename.$suffix
 		fi
@@ -62,6 +63,7 @@ fi
 }
 function confirmDirExist(){
 dirname=$1;
+#-f判断dirname这个目录是否存在
 if [ -d "$dirname" ]; then 
 	rm -rf "$dirname"
 fi
