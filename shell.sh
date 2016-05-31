@@ -187,7 +187,11 @@ dpa)
 adb shell dumpsys activity top > $outPutFile
 ;;
 dpaa)
-adb shell dumpsys activity activities | sed -En -e '/Running activities/,/Run #0/p';
+adb shell dumpsys activity activities > $outPutFile;
+;;
+dpaa2)
+#显示当前设备的所有任务栈内信息
+adb shell dumpsys activity activities | sed -n '/Running activities/,/Run #0/p';
 ;;
 dpi)
 adb shell dumpsys input > $outPutFile
@@ -205,7 +209,9 @@ df)
 adb shell df > $outPutFile
 ;;
 dbl)
-adb pull //data/data/com.android.providers.settings/databases/settings.db;
+dirname=$rootDir/DeviceInfo/AndroidL_data;
+confirmDirExist $dirname;
+adb pull //data/data/com.android.providers.settings/databases/settings.db $dirname;
 ;;
 dbm)
 userid=$2;
