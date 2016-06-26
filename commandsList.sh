@@ -1,3 +1,5 @@
+#!/bin/sh
+function commandsDemo(){
 #一、替换
 #1、数组替换
 SrcWord=(
@@ -23,7 +25,6 @@ sed -i 's#$#& TAILTIGER#g' $File;
 #3、特殊内容替换
 <b>This</b> is what <b>I</b> meant --》This is what I meant
 sed -e 's#<[^>]*>##g' /home/mengtao1/Downloads/strings.xml
-}
 
 #二、内容删除
 #1、循环删除
@@ -31,8 +32,8 @@ for SrcWord in \
 	font_sdcard_description_two_cn\
 	custom_theme_systemui
 do
-find . -name "*.xml" | xargs sed -i '/<string.*name="'$SrcWord'"/d'
-find . -name "*.xml" | xargs sed -i "/<string-array.*name=\"$SrcWord\"/,/<\/string-array>/d"
+	find . -name "*.xml" | xargs sed -i '/<string.*name="'$SrcWord'"/d'
+	find . -name "*.xml" | xargs sed -i "/<string-array.*name=\"$SrcWord\"/,/<\/string-array>/d"
 done
 
 #Replace only once,
@@ -51,19 +52,18 @@ sed -i "/<!--.*-->/d" $FILE_Temp
 sed -i "/<!--/,/-->/d" $FILE_Temp
 #3)删除空行
 sed -i "/^$/d" $FILE_Temp
-}
 
 #三、内容输出
 #找出所有语言下的特定string ID内容并且输出
 for VALUES in \
 values
 do
-for ROAD in `find . -name "$VALUES"`
-do
-find $ROAD -name "*.xml" | grep -R '="status_bar_settings_notifications"' $ROAD >>/home/mengtao1/Downloads/Strings.xml
+	for ROAD in `find . -name "$VALUES"`
+	do
+	find $ROAD -name "*.xml" | grep -R '="status_bar_settings_notifications"' $ROAD >>/home/mengtao1/Downloads/Strings.xml
+	done
 done
-done
-}
+
 
 
 #五、批量操作命令
@@ -90,7 +90,6 @@ repo forall -c "git reset --hard; git clean -fdx"
 #6、查找针对某一模块的log信息
 git log --pretty=oneline ./packages/apps/Settings/res/values-es-rUS/strings.xml
 
-}
 
 #8、判断文件(目录)是否存在或者具有权限
 #!/bin/sh 
@@ -99,15 +98,21 @@ myFile="/var/log/httpd/access.log"
 
 #这里的-x 参数判断$myPath是否存在并且是否具有可执行权限 
 if [ ! -x "$myPath"]; then 
-mkdir "$myPath" 
+	mkdir "$myPath" 
 fi
 
 #其他参数还有-n,-n是判断一个变量是否是否有值 
 if [ ! -n "$myVar" ]; then 
-echo "$myVar is empty" 
-exit 0 
+	echo "$myVar is empty" 
+	exit 0 
 fi
 
+#How to use?
+rootDir=/e/Bat_shell/Files;
+outPutFile=$rootDir/log.txt
+localesDir=/e/Bat_shell/Files/locales;
+ampm $localesDir $outPutFile;
+}
 
 #4.Across line to find the content
 function ampm(){
@@ -136,29 +141,9 @@ function ampm(){
 		index=0;
 	done
 }
-#How to use?
-rootDir=/e/Bat_shell/Files;
-outPutFile=$rootDir/log.txt
-localesDir=/e/Bat_shell/Files/locales;
-ampm $localesDir $outPutFile;
 
-function aaptFunction(){
-	dir=/d/workspace/AndroidTest
-	sdk_dir=/e/Android/android-sdk-M/platforms/android-23/
-	# 编译后生成的zip文件
-	out_filename=./SourceAapt.zip
-	# 解压后的文件夹
-	out_zipdir=./SourceAapt
-	# 编译
-	aapt p -f -M $dir/AndroidManifest.xml -F $out_filename -S $dir/res -I $sdk_dir/android.jar
-	# 解压
-	unzip -o $out_filename -d $out_zipdir
-	# 删除zip文件
-	rm $out_filename
-}
-
-function arrayParameter()
-{	paramArray=$1;
+function arrayParameter(){	
+	paramArray=$1;
 	echo "arraySize:${#paramArray[*]}"
     echo "Number of params: $#"
     echo "Params: $@"
@@ -188,3 +173,26 @@ function testArrayParameter(){
 	echo "-----Call function with \"\$paramArray\"-----"
 	arrayParameter $paramArray	
 }
+
+function aaptFunction(){
+	dir=/d/workspace/AndroidTest
+	sdk_dir=/e/Android/android-sdk-M/platforms/android-23/
+	# 编译后生成的zip文件
+	out_filename=./SourceAapt.zip
+	# 解压后的文件夹
+	out_zipdir=./SourceAapt
+	if [ -d "$out_zipdir" ]; then
+		rm -rf "$out_zipdir";
+	fi
+	# 编译
+	aapt p -f -M $dir/AndroidManifest.xml -F $out_filename -S $dir/res -I $sdk_dir/android.jar
+	# 解压
+	unzip -o $out_filename -d $out_zipdir
+	# 删除zip文件
+	if [ -f "$out_filename" ]; then
+		rm "$out_filename";
+	fi	
+}
+
+#Here comes the operating...
+aaptFunction
