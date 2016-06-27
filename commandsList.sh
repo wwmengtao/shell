@@ -194,5 +194,49 @@ function aaptFunction(){
 	fi	
 }
 
+function CreateProject(){
+	roadDirName=.;#此目录提供所有待拷贝的模块名称
+	roadSrc=/home/mengtao1/localrepo/Affinity;#此目录提供roadDirName中模块名称下的内容， 比如/home/mengtao1/localrepo/K5_2_row
+	roadTar=/home/mengtao1/Downloads/Affinity;#拷贝内容最终存放地点，如/home/mengtao1/Downloads/K5_row_en
+	if [ -d "$roadTar" ]; then 
+	    rm -rf $roadTar;
+	fi
+	for ROAD in `find $roadDirName -name "values" | sed "s#\/values##g"`
+	do
+		for VALUES in \
+			values-pl\
+			values-nl-rBE\
+			values-da-rDK\
+			values-sv-rSE\
+			values-nb-rNO\
+			values-fi-rFI\
+			values-et-rEE\
+			values-lv-rLV\
+			values-lt-rLT\
+			values-de-rDE\
+			values-it-rIT\
+			values-iw-rIL\
+			values-nl\
+			values-da\
+			values-sv\
+			values-nb\
+			values-fi\
+			values-et\
+			values-lv\
+			values-lt\
+			values-de\
+			values-it\
+			values-iw
+		do
+			if [ -d "$roadSrc/$ROAD/$VALUES" ]; then 
+				echo "hehe""$roadSrc/$ROAD/$VALUES"
+				if [ ! -d "$roadTar/$ROAD" ]; then 
+					mkdir -p "$roadTar/$ROAD"
+				fi
+				cp -rf $roadSrc/$ROAD/$VALUES $roadTar/$ROAD;
+			fi
+		done
+	done
+}
 #Here comes the operating...
-aaptFunction
+#aaptFunction
