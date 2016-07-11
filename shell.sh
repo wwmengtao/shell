@@ -117,7 +117,9 @@ adbPush $filename "apk" "//system/priv-app"
 s)
 for filename in \
 	DownloadProviderUi\
-	DocumentsUI
+	DocumentsUI\
+	PhotoTable\
+	ColorProfiles
 do
 	adbPush $filename "apk" "//system/app" $APKDelete
 done
@@ -166,21 +168,23 @@ r)
 	adb start-server
 ;;
 l)
-	adb logcat -c
-	echo Tip:Logcat is runing......
-	if [ "$2" = "mtk" ]
-	then
-		dirname=$rootDir/DeviceInfo/mtklog;
+	if [ "$2" = "mtk" ];then
+		dirname=$rootDir/DeviceInfo/mtkLog;
 		confirmDirExist $dirname;
 		adb pull //sdcard/mtklog/mobilelog $dirname;
-	fi
-	if [ "$2" = "" ]
-	then
+	elif [ "$2" = "qcom" ];then
+		dirname=$rootDir/DeviceInfo/qcomLog;
+		confirmDirExist $dirname;
+		adb pull //sdcard/log $dirname;
+	elif [ "$2" = "" ];then
+		adb logcat -c
+		echo Tip:Logcat is runing......
 		adb logcat > $outPutFile
+	elif [ "$2" = "wm" ];then
+		adb logcat -v time -s WindowManager > $outPutFile	
 	else
 		adb logcat |grep $2
 	fi
-	#adb logcat -v time -s WindowManager > $outPutFile
 ;;
 gp)
 	adb shell getprop > $outPutFile
@@ -216,19 +220,26 @@ confirmDirExist $dirname;
 adb pull //data/data/com.android.providers.settings/databases/settings.db $dirname;
 ;;
 dbm)
-userid=$2;
-dirname=$rootDir/DeviceInfo/Users/$userid;
-confirmDirExist $dirname;
-adb pull //data/system/users/$userid/settings_global.xml $dirname;
-adb pull //data/system/users/$userid/settings_secure.xml $dirname;
-adb pull //data/system/users/$userid/settings_system.xml $dirname;
-adb pull //data/system/users/$userid/restricted-packages.xml $dirname;
-adb pull //data/system/users/$userid/package-restrictions.xml $dirname;
-adb pull //data/system/users/$userid/registered_services $dirname;
-adb pull //data/system/users/$userid/runtime-permissions.xml $dirname;
-adb pull //data/system/users/$userid/appwidgets.xml $dirname;
-#adb pull //data/data/com.android.providers.settings/databases/settings.db-backup;
-#adb pull //data/data/com.android.providers.settings/databases/settings.db-journal;
+userid="$2";
+if [ "all" = $userid ];then
+	dirname=$rootDir/DeviceInfo/Users;
+	confirmDirExist $dirname;
+	adb pull //data/system/users $dirname;
+else
+	dirname=$rootDir/DeviceInfo/Users/$userid;
+	confirmDirExist $dirname;
+	adb pull //data/system/users/$userid/settings_global.xml $dirname;
+	adb pull //data/system/users/$userid/settings_secure.xml $dirname;
+	adb pull //data/system/users/$userid/settings_system.xml $dirname;
+	adb pull //data/system/users/$userid/restricted-packages.xml $dirname;
+	adb pull //data/system/users/$userid/package-restrictions.xml $dirname;
+	adb pull //data/system/users/$userid/registered_services $dirname;
+	adb pull //data/system/users/$userid/runtime-permissions.xml $dirname;
+	adb pull //data/system/users/$userid/appwidgets.xml $dirname;
+	#adb pull //data/data/com.android.providers.settings/databases/settings.db-backup;
+	#adb pull //data/data/com.android.providers.settings/databases/settings.db-journal;
+fi
+
 ;;
 dbi)
 dirname=$rootDir/DeviceInfo/InputInfo;
