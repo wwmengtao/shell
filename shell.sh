@@ -169,11 +169,11 @@ r)
 ;;
 l)
 	if [ "$2" = "mtk" ];then
-		dirname=$rootDir/DeviceInfo/mtkLog;
+		dirname=$rootDir/DeviceInfo/Logcat/mtkLog;
 		confirmDirExist $dirname;
 		adb pull //sdcard/mtklog/mobilelog $dirname;
 	elif [ "$2" = "qcom" ];then
-		dirname=$rootDir/DeviceInfo/qcomLog;
+		dirname=$rootDir/DeviceInfo/Logcat/qcomLog;
 		confirmDirExist $dirname;
 		adb pull //sdcard/log $dirname;
 	elif [ "$2" = "" ];then

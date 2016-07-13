@@ -201,7 +201,7 @@ function CreateProject(){
 	if [ -d "$roadTar" ]; then 
 	    rm -rf $roadTar;
 	fi
-	for ROAD in `find $roadDirName -name "values" | sed "s#\/values##g"`
+	for ROAD in `find $roadDirName -name "values" | sed "s#\/values##g" | sed "s#.*\.\/##"`
 	do
 		for VALUES in \
 			values-pl\
