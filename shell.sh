@@ -181,8 +181,10 @@ l)
 		echo Tip:Logcat is runing......
 		adb logcat > $outPutFile
 	elif [ "$2" = "wm" ];then
+		adb logcat -c
 		adb logcat -v time -s WindowManager > $outPutFile	
 	else
+		adb logcat -c
 		adb logcat |grep $2
 	fi
 ;;
@@ -261,6 +263,9 @@ dirname=$rootDir/DeviceInfo/AppOps;
 confirmDirExist $dirname;
 adb pull //data/system/appops.xml $dirname;
 adb pull //system/etc/appops_policy.xml $dirname;
+;;
+kill)
+adb shell kill -9 $2;
 ;;
 pml)
 adb shell pm list packages -f > $outPutFile
