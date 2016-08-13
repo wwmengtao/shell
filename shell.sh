@@ -113,6 +113,7 @@ p)
 filename=PowerManager;
 mv Power*.apk $filename.apk
 adbPush $filename "apk" "//system/priv-app"
+adb reboot
 ;;
 s)
 for filename in \
@@ -192,12 +193,15 @@ gp)
 	adb shell getprop > $outPutFile
 ;;
 dpa)
+adb shell dumpsys activity > $outPutFile
+;;
+dpat)
 adb shell dumpsys activity top > $outPutFile
 ;;
 dpaa)
 adb shell dumpsys activity activities > $outPutFile;
 ;;
-dpaa2)
+dpaar)
 #显示当前设备的所有任务栈内信息
 adb shell dumpsys activity activities | sed -n '/Running activities/,/Run #0/p';
 ;;
@@ -209,6 +213,9 @@ adb shell dumpsys notification > $outPutFile
 ;;
 dpw)
 adb shell dumpsys window > $outPutFile
+;;
+dpww)
+adb shell dumpsys window  | sed -n '/WINDOW MANAGER WINDOWS/,/mLastDisplayFreezeDuration/p'> $outPutFile
 ;;
 dpp)
 adb shell pm list package -f > $outPutFile
