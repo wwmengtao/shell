@@ -141,7 +141,8 @@ for filename in \
 	AndroidTest2\
 	AndroidTest\
 	WideTouch\
-	AndroidCustomedControler
+	AndroidCustomedControler\
+	LenovoBreathingLight
 do	
 	adbPush $filename "apk" "//system/priv-app" $APKDelete
 done
@@ -186,7 +187,7 @@ l)
 		adb logcat -v time -s WindowManager > $outPutFile	
 	else
 		adb logcat -c
-		adb logcat |grep $2
+		adb logcat |grep "$2"
 	fi
 ;;
 gp)
@@ -216,9 +217,6 @@ adb shell dumpsys window > $outPutFile
 ;;
 dpww)
 adb shell dumpsys window  | sed -n '/WINDOW MANAGER WINDOWS/,/mLastDisplayFreezeDuration/p'> $outPutFile
-;;
-dpp)
-adb shell pm list package -f > $outPutFile
 ;;
 df)
 adb shell df > $outPutFile
