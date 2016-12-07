@@ -32,8 +32,8 @@ if [ -f $filename*.$suffix ]; then
 
 	let index_remount++
 	if [ $index_remount = 1 ]; then 
-		adb remount
 		echo "remount..."
+		adb remount
 	fi
 	index_reboot=1
 	case "$suffix" in
@@ -118,7 +118,6 @@ adb reboot
 s)
 for filename in \
 	DownloadProviderUi\
-	DocumentsUI\
 	PhotoTable\
 	ColorProfiles
 do
@@ -142,7 +141,9 @@ for filename in \
 	AndroidTest\
 	WideTouch\
 	AndroidCustomedControler\
-	LenovoBreathingLight
+	LenovoBreathingLight\
+	DocumentsUI
+
 do	
 	adbPush $filename "apk" "//system/priv-app" $APKDelete
 done
