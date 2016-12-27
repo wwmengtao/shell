@@ -264,6 +264,12 @@ adb pull $xmlDir/mRunningProcesses.xml $dirname;
 adb pull $xmlDir/mInterestingProcesses.xml $dirname;
 adb pull $xmlDir/mMergedItems.xml $dirname;
 ;;
+dbcd)
+adb pull //data/data/com.bignerdranch.android.criminalintent/databases/dbHelper.db
+;;
+dbatd)
+adb pull //data/data/com.mt.androidtest_as/databases/androidtest_at.db
+;;
 ops)
 dirname=$rootDir/DeviceInfo/AppOps;
 confirmDirExist $dirname;
@@ -275,6 +281,9 @@ adb shell kill -9 $2;
 ;;
 pml)
 adb shell pm list packages -f > $outPutFile
+;;
+pinfo)#aapt方式查看$2对应的*.apk的包信息
+aapt dump badging $2 > $outPutFile
 ;;
 ps)
 if [ "$2" = "" ]
