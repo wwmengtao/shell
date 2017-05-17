@@ -33,6 +33,7 @@ if [ -f $filename*.$suffix ]; then
 	let index_remount++
 	if [ $index_remount = 1 ]; then 
 		echo "remount..."
+		adb root
 		adb remount
 	fi
 	index_reboot=1
@@ -182,6 +183,7 @@ l)
 	elif [ "$2" = "" ];then
 		adb logcat -c
 		echo Tip:Logcat is runing......
+		echo "" > $outPutFile
 		adb logcat > $outPutFile
 	elif [ "$2" = "wm" ];then
 		adb logcat -c
@@ -209,6 +211,11 @@ adb shell dumpsys activity activities | sed -n '/Running activities/,/Run #0/p';
 ;;
 dpi)
 adb shell dumpsys input > $outPutFile
+;;
+dpm)
+#查看packageName对应的应用占用的内存情况
+packageName="$2";
+adb shell dumpsys meminfo $packageName
 ;;
 dpn)
 adb shell dumpsys notification > $outPutFile
@@ -268,7 +275,10 @@ dbcd)
 adb pull //data/data/com.bignerdranch.android.criminalintent/databases/dbHelper.db
 ;;
 dbatd)
-adb pull //data/data/com.mt.androidtest_as/databases/androidtest_at.db
+adb pull //data/data/com.mt.androidtest_as/databases/crimesRecord.db
+;;
+at2ip)
+adb pull //data/data/com.mt.androidtest2/databases/androidtest_at.db
 ;;
 ops)
 dirname=$rootDir/DeviceInfo/AppOps;
@@ -297,6 +307,11 @@ sp)
 dirname=$rootDir/DeviceInfo/SharedPreferences;
 confirmDirExist $dirname;
 adb pull //data/data/com.lenovo.widetouch/shared_prefs $dirname;
+;;
+root)
+adb root  
+adb disable-verity
+adb reboot
 ;;
 esac
 #Following judge if reboot the device
