@@ -102,7 +102,7 @@ function demo(){
 }
 #Here comes the operating...
 adbDeviceExists;#firstly, judge if the adb devices exists
-rootDir=/e/Bat_shell/Files;
+rootDir=/e/Bat_shell/shell;
 outPutFile=$rootDir/log.txt
 echo "Parameter1:$1"
 #Uppercase to Lowercase
@@ -167,6 +167,17 @@ do
 	adbPush $filename "apk"	"//system/framework" $APKDelete
 done
 ;;
+
+odex)
+for filename in \
+	boot-framework\
+	boot
+do
+	adbPush $filename "oat"	"//system/framework/arm" $APKDelete
+	adbPush $filename "art"	"//system/framework/arm" $APKDelete
+done
+;;
+
 r)
 	adb kill-server
 	adb start-server
@@ -182,7 +193,7 @@ l)
 		adb pull //sdcard/log $dirname;
 	elif [ "$2" = "" ];then
 		adb logcat -c
-		echo Tip:Logcat is runing......
+		echo Tip:Logcat is running......
 		echo "" > $outPutFile
 		adb logcat > $outPutFile
 	elif [ "$2" = "wm" ];then
@@ -280,6 +291,12 @@ adb pull //data/data/com.mt.androidtest_as/databases/crimesRecord.db
 at2ip)
 adb pull //data/data/com.mt.androidtest2/databases/androidtest_at.db
 ;;
+crashlog)
+adb pull //sdcard/Download/com.mt.androidtest_as/Crash/mycrash.log
+;;
+crashlog2)
+adb pull //sdcard/Download/com.mt.androidtest/Crash/mycrash.log
+;;
 ops)
 dirname=$rootDir/DeviceInfo/AppOps;
 confirmDirExist $dirname;
@@ -324,6 +341,3 @@ if [ $index_reboot = 1 -a "$reboot" -eq 1 ]; then
 	adb reboot
 	echo "rebooting..."
 fi
-
-
-
